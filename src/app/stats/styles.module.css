@@ -1,0 +1,48 @@
+.viewPortWrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.headerContainer {
+    flex: 0 0 50px;
+    border: 1px solid red;
+}
+
+.layoutContainer {
+    flex: 1 1 100%;
+    border: 1px solid gray;
+    display: flex;
+}
+
+.sideBarContainer {
+    flex: 0 0 20rem;
+    border: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+}
+
+.searchBarWrapper {
+    height: 50px;
+    border: 1px solid green;
+    padding: 8px;
+}
+
+.inputBox {
+    border: 1px solid gray;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+}
+
+.contributorsList {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    border: 1px solid brown;
+}
+
+.bodyContainer {
+    flex: 1 1 100%;
+    border: 1px solid gray;
+}
