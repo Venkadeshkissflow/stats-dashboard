@@ -1,0 +1,15 @@
+.cardContainer {
+    display: flex;
+    flex-direction: column;
+    column-gap: 8px;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.title {
+    font-size: 18px;
+}
+
+.value {
+    font-size: 36px;
+}

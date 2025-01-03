@@ -1,7 +1,6 @@
-import Card from "@/app/(components)/card";
 import { getReviewersCommentsInfo } from "@/app/service";
 
-import styles from "./styles.module.css"
+import Count from "@/app/(components)/count";
 
 export default async function CommentsCount({contributorId}){
       console.log(contributorId, "************ contributorId ***********")
@@ -12,11 +11,6 @@ export default async function CommentsCount({contributorId}){
       })
 
     return (
-        <Card className={styles.commentsCountWrapper}>
-            <span className={styles.title}>Total comments count</span>
-            <span className={styles.value}>
-            {userCommentsInfo.length}
-            </span>
-        </Card>
+        <Count title={"Total comments count"} count={userCommentsInfo.length} />
     )
 }
