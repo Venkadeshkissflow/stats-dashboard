@@ -34,22 +34,41 @@ async function getUserAssignedPullRequestStateCount(pullRequestList, contributor
 }
 
 export default async function ContributorStats({params}) {
-  const contributorId = (await params).contributor
 
-  const pullRequestList = await getPullRequestInfo();
+  const contributorId = (await params).contributor;
 
-  const reviewersList = await getUserAssignedPullRequestStateCount(pullRequestList, contributorId);
+  // function getUserAssignedPrIngo(){
+  //   const reviewersList = getUserAssignedPullRequestStateCount(pullRequestList, contributorId).then(()=>{
 
-  let assignedPullRequestCount = assignedPullRequestCounts(pullRequestList, contributorId)
+  //   }).catch((errorMsg)=>{
+  //     console.log(errorMsg)
+  //   })
+  // }
 
-  console.log({pullRequestList,reviewersList}, "************ reviewersList ************")
+  // useEffect(function initalMount(){
+    
+  // }, [])
+
+
+
+  // const pullRequestList = await getPullRequestInfo();
+
+
+
+  // let assignedPullRequestCount = assignedPullRequestCounts(pullRequestList, contributorId)
+
+  // console.log({pullRequestList,reviewersList}, "************ reviewersList ************")
+
 
   return (
     <div>
       <CommentsCount contributorId={contributorId} />
-      <Count title={"Assigned pull request count"} count={assignedPullRequestCount} />
+      {/* <Count title={"Assigned pull request count"} count={assignedPullRequestCount} />
       <Count title={"Approved pr count"} count={reviewersList.approvedCount} />
-      <Count title={"Pending approval pr count"} count={assignedPullRequestCount - reviewersList.approvedCount} />
+      <Count title={"Pending approval pr count"} count={assignedPullRequestCount - reviewersList.approvedCount} /> */}
+        <Count title={"Assigned pull request count"} count={12} />
+        <Count title={"Approved pr count"} count={12} />
+        <Count title={"Pending approval pr count"} count={11} />
     </div>
   );
 }

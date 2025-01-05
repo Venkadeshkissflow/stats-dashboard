@@ -31,3 +31,13 @@ export async function getPullRequestReviewInfo(pull_request_number){
 })
 return res.json();
 }
+
+export async function getContributorsList(){
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/forks`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github.v3+json",
+    },
+  })
+  return res.json();
+}

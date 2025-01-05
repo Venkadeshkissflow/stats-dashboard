@@ -1,0 +1,26 @@
+.sideBarContainer {
+    flex: 0 0 20rem;
+    border: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+}
+
+.searchBarWrapper {
+    height: 50px;
+    border: 1px solid green;
+    padding: 8px;
+}
+
+.inputBox {
+    border: 1px solid gray;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+}
+
+.contributorsList {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    border: 1px solid brown;
+}
