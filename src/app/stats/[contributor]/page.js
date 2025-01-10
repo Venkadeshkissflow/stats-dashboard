@@ -7,6 +7,11 @@ import CommentsCount from "./(comments_count)";
 import AssignedPullRequestCount from "./(assigned_pullrequest_count)";
 import Count from "@/app/(components)/count";
 
+const STATE = {
+  APPROVED: "APPROVED",
+  COMMENTED: "COMMENTED"
+}
+
 function assignedPullRequestCounts(pullRequestList, contributorId){
   let assignedPullRequests = pullRequestList.filter((prInfo)=>{
     return prInfo.assignees.find((assignee)=> assignee.login === contributorId);
@@ -14,21 +19,79 @@ function assignedPullRequestCounts(pullRequestList, contributorId){
   return assignedPullRequests.length
 }
 
-async function getUserAssignedPullRequestStateCount(pullRequestList, contributorId){
-  let approvedPrCount = 0;
-  let waitingForApprovalCount = 0;
+function checkIsAssignedPr(assigneeList, userId){
+  return assigneeList.some((res) => {
+    return res.login === userId;
+  })
+}
 
-  pullRequestList.forEach(async ({number: prnumber}) => {
+function checkIsCurrentUserOpenedPr(user, contributorId){
+  return user.login === contributorId;
+}
+
+function checkCurrentUserState(prInfo, contributorId, userState){
+  const {user, state}=prInfo;
+  // console.log({user, state, userState, contributorId}, "check")
+  return user.login === contributorId && state === userState
+}
+
+function getUserContributionData(prReviewInfo, contributorId){
+  let approvedPrCount = 0;
+  let commentsCount = 0;
+
+  prReviewInfo.forEach((prInfo)=> {
+    const isCurrentUserApproved = checkCurrentUserState(prInfo, contributorId, STATE.APPROVED)
+    if(isCurrentUserApproved){
+      approvedPrCount=approvedPrCount + 1;
+    }
+
+    const isCurrentUserCommented = checkCurrentUserState(prInfo, contributorId, STATE.COMMENTED)
+    if(isCurrentUserCommented){
+      console.log(commentsCount, "commentsCount 12");
+      // console.log(isCurrentUserCommented, "check")
+      commentsCount = commentsCount + 1;
+    }
+  })
+
+  return {
+    commentsCount: commentsCount,
+    approvedCount: approvedPrCount,
+  }
+
+}
+
+async function getUserPrState(pullRequestList, contributorId){
+
+  let waitingForApprovalCount = 0;
+  let assignedPrCount = 0;
+  let openPrCount = 0;
+  let contributionData={}
+
+  // console.log({contributorId, pullRequestList}, "pr list")
+
+  pullRequestList.forEach(async (prInfo) => {
+
+    const {number: prnumber, assignees, user, title} = prInfo;
+
+    let isCurrentUserOpenedPr = checkIsCurrentUserOpenedPr(user, contributorId);
+    if(isCurrentUserOpenedPr){
+      openPrCount = openPrCount + 1;
+    }
+
+    let isAssignedPr = checkIsAssignedPr(assignees, contributorId);
+    if(isAssignedPr){
+      assignedPrCount = assignedPrCount + 1;
+    }
+
     let prReviewInfo =  await getPullRequestReviewInfo(prnumber);
-    prReviewInfo.forEach((prInfo)=> {
-      if(prInfo.login === contributorId && prInfo.state === "APPROVED"){
-        approvedPrCount=approvedPrCount + 1;
-      }
-    })
-    console.log(prReviewInfo, "&&&&&&&&&& prReviewInfo &&&&&&&&&&&")
+
+    contributionData = getUserContributionData(prReviewInfo, contributorId);
+
   });
   return {
-    approvedCount: approvedPrCount,
+    ...contributionData,
+    openPrCount: openPrCount,
+    assignedPrCount: assignedPrCount,
     pendingCount: waitingForApprovalCount
 }
 }
@@ -37,28 +100,19 @@ export default async function ContributorStats({params}) {
 
   const contributorId = (await params).contributor;
 
-  // function getUserAssignedPrIngo(){
-  //   const reviewersList = getUserAssignedPullRequestStateCount(pullRequestList, contributorId).then(()=>{
+  const pullRequestInfo = await getPullRequestInfo()
 
-  //   }).catch((errorMsg)=>{
-  //     console.log(errorMsg)
-  //   })
-  // }
+  const { 
+    assignedPrCount, 
+    approvedCount, 
+    pendingCount, 
+    openPrCount, 
+    commentsCount 
+  } = await getUserPrState(pullRequestInfo, contributorId);
 
-  // useEffect(function initalMount(){
-    
-  // }, [])
+  // const {}
 
-
-
-  // const pullRequestList = await getPullRequestInfo();
-
-
-
-  // let assignedPullRequestCount = assignedPullRequestCounts(pullRequestList, contributorId)
-
-  // console.log({pullRequestList,reviewersList}, "************ reviewersList ************")
-
+  console.log({contributorId}, "check state");
 
   return (
     <div>
@@ -69,6 +123,9 @@ export default async function ContributorStats({params}) {
         <Count title={"Assigned pull request count"} count={12} />
         <Count title={"Approved pr count"} count={12} />
         <Count title={"Pending approval pr count"} count={11} />
+        <Count title={"Assigned pr count"} count={assignedPrCount} />
+        <Count title={"Open pr count"} count={openPrCount} />
+        <Count title={"Comments count"} count={commentsCount} />
     </div>
   );
 }
