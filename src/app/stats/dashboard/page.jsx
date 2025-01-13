@@ -1,9 +1,5 @@
+import styles from "./styles.module.css";
 
 export default async function Dashboard() {
-
-  return (
-    <div >
-      iam from Dashbaord
-    </div>
-  );
+  return <div className={styles.dashboard}>iam from Dashbaord</div>;
 }

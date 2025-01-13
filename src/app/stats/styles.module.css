@@ -1,21 +1,23 @@
 .viewPortWrapper {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .headerContainer {
-    flex: 0 0 50px;
-    border: 1px solid red;
+  flex: 0 0 50px;
+  border: 1px solid red;
 }
 
 .layoutContainer {
-    flex: 1 1 100%;
-    border: 1px solid gray;
-    display: flex;
+  flex: 1 1 100%;
+  border: 2px solid blue;
+  display: flex;
+  overflow: hidden;
 }
 
 .bodyContainer {
-    flex: 1 1 100%;
-    border: 1px solid gray;
+  flex: 1 1 100%;
+  border: 1px solid gray;
 }
